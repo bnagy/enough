@@ -1,8 +1,6 @@
 package enough
 
 import (
-	_ "crypto/sha256"
-	_ "crypto/sha512"
 	"crypto/x509"
 	"encoding/pem"
 	"testing"
