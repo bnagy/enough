@@ -73,7 +73,7 @@ Here are some suggestions:
 
 __Why ECDHE?__
 
-[Thomas Porninis smarter than I am](http://security.stackexchange.com/a/27888)
+[Thomas Pornin is smarter than I am](http://security.stackexchange.com/a/27888)
 
 __Why GCM?__
 
