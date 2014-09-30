@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	service = flag.String("service", "", "Service name eg 'WidgetCluser' (required)")
+	name    = flag.String("name", "", "A short, shared service name eg 'WidgetCluser' (required)")
 	clients = flag.Int("clients", 1, "Number of client cert / keys to generate")
 )
 
@@ -32,7 +32,6 @@ func output(c *enough.RawCert, stub string) {
 		log.Fatalf("failed to write %s: %s", certName, err)
 	}
 	certOut.Close()
-	log.Printf("written %s\n", certName)
 
 	keyName := stub + "_key.pem"
 	keyOut, err := os.OpenFile(keyName, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
@@ -51,27 +50,30 @@ func output(c *enough.RawCert, stub string) {
 	}
 
 	keyOut.Close()
-	log.Printf("written %s\n", keyName)
+	log.Printf("wrote %s, %s\n", certName, keyName)
 }
 
 func main() {
 
 	flag.Parse()
-	if len(*service) == 0 {
+	if len(*name) == 0 {
 		flag.Usage()
-		log.Fatal("\nService name required!")
+		log.Fatal("\nservice name required!")
 	}
-	if len(*service) > 140 {
+	if len(*name) > 140 {
 		flag.Usage()
 		log.Fatal("\nOh, grow up.")
 	}
-	ca, err := enough.NewCA(*service)
+
+	ca, err := enough.NewCA(*name)
 	output(&ca.Raw, "ca")
+
 	server, err := ca.CreateServerCert()
 	if err != nil {
 		log.Fatalf("unable to create server cert: %s", err)
 	}
 	output(server, "server")
+
 	for i := 0; i < *clients; i++ {
 		c, err := ca.CreateClientCert(i)
 		if err != nil {
