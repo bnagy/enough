@@ -18,9 +18,9 @@ So yeah. I wrote this, which is just enough.
 
 ## Documentation
 
-If you want to use `import "github.com/bnagy/enough"` in your own code, you
-can get godoc at: http://godoc.org/github.com/bnagy/enough/enough, but the
-code is very tiny.
+If you want to use `import "github.com/bnagy/enough"` in your own Go code, you
+can get godoc at: http://godoc.org/github.com/bnagy/enough, but the code is
+very tiny and you should probably just read it instead.
 
 To run the standalone tlspark tool:
 ```
@@ -28,7 +28,7 @@ ben$ ./tlspark --help
 Usage of ./tlspark:
   -clients=1: Number of client cert / keys to generate
   -name="": A short, shared service name eg 'WidgetCluser' (required)
-  ```
+```
 
 ## Installation
 
@@ -43,6 +43,14 @@ That should build the tlspark command automatically. If not:
 ```bash
 $ cd $GOPATH/src/github.com/bnagy/enough && go build
 ```
+
+Run the tests:
+```bash
+$ go test
+PASS
+ok  	github.com/bnagy/enough	6.215s
+```
+(it's slow because it creates and verifies 1000 client certs)
 
 NOTE: Because Go binaries are statically linked, you can build tlspark and
 then just ship binary copies around to systems where you need it - no need to
@@ -93,6 +101,13 @@ A bit, but I prioritised performance over paranoia.
 
 If you think you're worth someone burning the biggest crypto backdoor of the
 last 10 years on you you should probably write something yourself.
+
+__There are other tools like this. Why is this one good?__
+
+1. I couldn't find anything that uses ECDSA, only RSA. 
+2. Go is memory safe. 
+3. It doesn't use OpenSSL
+4. It produces cross platform binaries for almost anything, and has no library dependencies.
 
 ## Contributing
 
