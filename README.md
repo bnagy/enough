@@ -73,7 +73,7 @@ going to use static, manually distributed certs.
 Here are some suggestions:
 
 * Allow only TLS 1.2
-* Allow only TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 ( 0xc02b )
+* Allow >= TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 ( 0xc02b )
 * Turn off stuff like session ticket support
 * Clients _usually_ verify the server by default, but you should TURN ON client verification at the server end
 
@@ -89,11 +89,19 @@ Long story short, it's FAST, authenticated and patent free.
 
 __Why only AES-128?__
 
-GCM uses 128-bit blocks.
+TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 is the best suite supported by Go.
+These certs should work fine with 'stronger' suites, if you really care -
+openssl negotiates ECDHE-ECDSA-AES256-GCM-SHA384.
+
+It's my belief that unless AES is fundamentally hosed then 128 is more than
+enough. If it _is_ then 256 probably won't save us. Given that we're using
+GCM, which operates on 128-bit blocks, I like 128 better. I could be Just
+Wrong.
 
 __Why SHA256?__
 
-You're new around here, aren't you?
+See above. Personally, I'm comfortable enough with 256, but go 384 if you
+really want.
 
 __Why EC? Aren't you worried about those NIST curves?__
 
