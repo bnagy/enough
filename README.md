@@ -107,14 +107,11 @@ __Why EC? Aren't you worried about those NIST curves?__
 
 A bit, but I prioritised performance over paranoia.
 
-If you think you're worth someone burning the biggest crypto backdoor of the
-last 10 years on you you should probably write something yourself.
-
 __There are other tools like this. Why is this one good?__
 
 1. I couldn't find anything that uses ECDSA, only RSA. 
 2. Go is memory safe. 
-3. It doesn't use OpenSSL
+3. It doesn't use OpenSSL.
 4. It produces cross platform binaries for almost anything, and has no library dependencies.
 
 ## Contributing
@@ -122,6 +119,9 @@ __There are other tools like this. Why is this one good?__
 Fork and send a pull request to contribute code. I won't accept any code that
 adds options. If you find that I have done something insane with my TLS, open
 an Issue.
+
+PLEASE help me out with examples that interoperate with the canonical Go
+client / server, written in various languages. That would be swell, thanks. :)
 
 ## License
 
