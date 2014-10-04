@@ -56,17 +56,25 @@ opts = [
 # that are signed by this CA should be allowed.
 store = OpenSSL::X509::Store.new
 store.add_cert(CA)
-store.purpose = OpenSSL::X509::PURPOSE_SSL_CLIENT
 
-ctx = SSLContext.new()
-ctx.options = opts.inject(&:|) 
+# Set up the OpenSSL "context" which configures a myriad of confusing options.
+ctx = SSLContext.new :TLSv1_2
+ctx.options = opts.inject(&:|)
 ctx.cert = CERT
 ctx.key = KEY
 ctx.cert_store = store
-# Here we only allow this one cipher suite.
-ctx.ciphers = "ECDHE-ECDSA-AES256-GCM-SHA384"
+# This is the best suite supported by the Go server
+ctx.ciphers = "ECDHE-ECDSA-AES128-GCM-SHA256"
 # No peer verification is done without this!
 ctx.verify_mode = OpenSSL::SSL::VERIFY_PEER
+# Our server will be signed by the CA, not self-signed ( which would be depth 0 )
+ctx.verify_depth = 1
+# Debugging tip - the openssl errors can be stupidly terse, but sometimes the
+# verification callback lets you get a better error string.
+# ctx.verify_callback = lambda {|passed,ctx|
+#   puts ctx.error_string unless passed
+#   passed
+# }
 
 socket = TCPSocket.new(HOST, PORT)
 ssl = SSLSocket.new(socket, ctx)
@@ -74,4 +82,6 @@ ssl.sync_close = true
 ssl.connect
 
 ssl.write "HELLO FROM RUBBY\n"
-p ssl.readline
+if ssl.readline == "ACK\n"
+  puts "client: received ACK! All done..."
+end

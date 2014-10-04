@@ -3,4 +3,4 @@ There is a bug in Ruby OpenSSL.
 https://bugs.ruby-lang.org/issues/10257
 
 So, right now, you can't run a server that will work with these tools, but
-this client should interoperate.
+this client example interoperates.
