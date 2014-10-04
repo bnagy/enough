@@ -101,9 +101,10 @@ func createCert(name pkix.Name, usage x509.KeyUsage, extUsage []x509.ExtKeyUsage
 		SerialNumber:          serialNumber,
 		Subject:               name,
 		NotBefore:             time.Now(),
-		NotAfter:              time.Now().AddDate(100, 0, 0), // years
+		NotAfter:              time.Now().AddDate(10, 0, 0), // years
 		SignatureAlgorithm:    x509.ECDSAWithSHA256,
 		KeyUsage:              usage,
+		PublicKey:             ecdsaPriv.PublicKey,
 		ExtKeyUsage:           extUsage,
 		BasicConstraintsValid: true,
 	}
