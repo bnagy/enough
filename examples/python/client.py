@@ -54,9 +54,6 @@ OPTIONS = ssl.OP_NO_COMPRESSION | \
 ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 ctx.verify_mode = ssl.CERT_REQUIRED
 
-# using this or ssl.VERIFY_CRL_CHECK_CHAIN breaks things
-ctx.verify_flags = ssl.VERIFY_CRL_CHECK_LEAF
-
 ctx.options = OPTIONS
 ctx.set_ciphers("ECDHE-ECDSA-AES128-GCM-SHA256")
 ctx.load_verify_locations(CA.name)
