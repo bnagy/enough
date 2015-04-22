@@ -82,7 +82,7 @@ func validateFlagsAndReturnCA() (ca *enough.CA, e error) {
 		e = errors.New("name OR ca-cert and ca-key flag required!")
 	} else if present(*name) && len(*name) > 140 {
 		flag.Usage()
-		err = errors.New("Provided name is too long! Must be less than 140 characters.")
+		e = errors.New("Provided name is too long! Must be less than 140 characters.")
 	} else if present(*caCertPath, *caKeyPath) {
 		// Attempt to read cert and key files and create a CA struct from them
 		pemCert, err := ioutil.ReadFile(*caCertPath)
