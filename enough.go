@@ -37,6 +37,35 @@ type CA struct {
 	Service string
 }
 
+/**
+ * MakeCA
+ * Returns a new CA object based on pem data created by MarshalCertifcate and
+ * MarshalPrivateKey methods and read in from files.
+ */
+func NewCAFromCertAndKey(certPemData, keyPemData []byte) (ca *CA, e error) {
+	certPemBlock, _ := pem.Decode(certPemData)
+	keyPemBlock, _ := pem.Decode(keyPemData)
+
+	cert, e := x509.ParseCertificate(certPemBlock.Bytes)
+	if e != nil {
+		return
+	}
+
+	key, e := x509.ParseECPrivateKey(keyPemBlock.Bytes)
+	if e != nil {
+		return
+	}
+
+	// The certificate's subject common name is the service name with " CA" appended.
+	serviceName := cert.Subject.CommonName[0 : len(cert.Subject.CommonName)-3]
+	ca = &CA{
+		Raw:     RawCert{Certificate: *cert, PrivateKey: key},
+		Service: serviceName,
+	}
+
+	return
+}
+
 func NewCA(service string) (ca *CA, e error) {
 
 	name := pkix.Name{

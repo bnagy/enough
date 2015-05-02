@@ -3,8 +3,32 @@ package enough
 import (
 	"crypto/x509"
 	"encoding/pem"
+	"reflect"
 	"testing"
 )
+
+func TestNewCAFromCertAndKey(t *testing.T) {
+	t.Parallel()
+	ca, err := NewCA("testing")
+	if err != nil {
+		t.Fatalf("failed to create CA: %s", err)
+	}
+	pemCert, err := ca.Raw.MarshalCertificate()
+	if err != nil {
+		t.Fatalf("failed to marshal certificate: %s", err)
+	}
+	pemKey, err := ca.Raw.MarshalPrivateKey()
+	if err != nil {
+		t.Fatalf("failed to marshal private key: %s", err)
+	}
+	regenedCa, err := NewCAFromCertAndKey(pemCert, pemKey)
+	if err != nil {
+		t.Error("Cannot create CA from pem encoded cert and key")
+	}
+	if !reflect.DeepEqual(regenedCa, ca) {
+		t.Error("CA created is not equal to CA recreated with marshaled pem data")
+	}
+}
 
 func TestNewCA(t *testing.T) {
 	t.Parallel()
